@@ -215,9 +215,6 @@ def webhook():
     asyncio.run(application.process_update(update))
     return "ok", 200
 
-if __name__ == "__main__":
-    # مسح أي Webhook موجود مسبقاً لتجنب Conflict
-    bot.delete_webhook()
-
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+# ❗❗ مافيش app.run هنا ❗❗
+# Gunicorn هو اللي حيشغّل Flask تلقائيًا على Render
+# startCommand: gunicorn main:app --bind 0.0.0.0:$PORT
