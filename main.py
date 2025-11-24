@@ -1,6 +1,7 @@
 # -- coding: utf-8 --
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
+from flask import Flask, request
 import os, json
 import asyncio
 
@@ -10,6 +11,7 @@ CHANNEL_USERNAME = "@baher1ramzi"
 DATA_FILE = "data.json"
 
 bot = Bot(BOT_TOKEN)
+application = ApplicationBuilder().token(BOT_TOKEN).build()
 
 # ---------------- تحميل البيانات ----------------
 INITIAL_DATA = {
@@ -197,13 +199,25 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 # ---------------- تشغيل البوت ----------------
-application = ApplicationBuilder().token(BOT_TOKEN).build()
 application.add_handler(CommandHandler("start", start))
 application.add_handler(CallbackQueryHandler(button))
+
+# ---------------- Flask Webhook ----------------
+app = Flask(__name__)
+
+@app.route("/", methods=["GET"])
+def home():
+    return "Bot is running!", 200
+
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
+def webhook():
+    update = Update.de_json(request.get_json(force=True), bot)
+    asyncio.run(application.process_update(update))
+    return "ok", 200
 
 if __name__ == "__main__":
     # مسح أي Webhook موجود مسبقاً لتجنب Conflict
     bot.delete_webhook()
 
-    # تشغيل البوت بالـ polling
-    asyncio.run(application.run_polling())
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
