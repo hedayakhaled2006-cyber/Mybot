@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -- coding: utf-8 --
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 import os, json
@@ -26,7 +26,9 @@ INITIAL_DATA = {
             ],
             "b2": [
                 {"title": "المتطابقات المثلثية", "url": "https://drive.google.com/file/d/1zJirDPv6gDa78v9Q_BperrYToRavTMR0/view?usp=drivesdk"},
-                {"title": "الزوايا المركبة", "url": "https://drive.google.com/file/d/1UQDYp5q3jw7oEAiyJQoUmT413QlJl4DH/view?usp=drivesdk"}
+                {"title": "الزوايا المركبة", "url": "https://drive.google.com/file/d/1UQDYp5q3jw7oEAiyJQoUmT413QlJl4DH/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 1", "url": "https://drive.google.com/file/d/1y8SrlWYM0MWLGMOc2QwLTbKI6bCVaIkw/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 2", "url": "https://drive.google.com/file/d/1xvxHGrgatQ2-qb2lDdBtI4XfUAHwyKC1/view?usp=drivesdk"}
             ],
             "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
         },
@@ -71,7 +73,6 @@ INITIAL_DATA = {
             }  
         }  
     }
-
 }
 
 def load_data():
