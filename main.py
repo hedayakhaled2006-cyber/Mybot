@@ -1,9 +1,10 @@
 # -- coding: utf-8 --
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, CallbackQueryHandler,
     ContextTypes
 )
+from flask import Flask, request
 import os, json
 
 # ---------------- إعدادات ----------------
@@ -11,6 +12,25 @@ import os, json
 BOT_TOKEN = "8165119800:AAFm-hkwjdn3765NMmwGTRvAzEFr1H0WFDE"
 CHANNEL_USERNAME = "@baher1ramzi"
 DATA_FILE = "data.json"
+
+# Telegram Bot Object
+bot = Bot(BOT_TOKEN)
+
+# ---------------- Flask App ----------------
+
+app = Flask(__name__)
+
+@app.route("/", methods=["GET"])
+def home():
+    return "Bot is running!", 200
+
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
+def webhook():
+    data = request.get_json(force=True)
+    update = Update.de_json(data, bot)
+    application.process_update(update)
+    return "ok", 200
+
 
 # ---------------- بيانات البوت ----------------
 
@@ -108,13 +128,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    keyboard = [  
-        [InlineKeyboardButton("📘 رياضيات", callback_data="math")],  
-        [InlineKeyboardButton("📗 إحصاء", callback_data="stats")]  
-    ]  
-    await update.message.reply_text(  
-        "حياك الله في بوت م.باهر رمزي 👋، اختر المادة لبدء التحميل",  
-        reply_markup=InlineKeyboardMarkup(keyboard)  
+    keyboard = [
+        [InlineKeyboardButton("📘 رياضيات", callback_data="math")],
+        [InlineKeyboardButton("📗 إحصاء", callback_data="stats")]
+    ]
+    await update.message.reply_text(
+        "حياك الله في بوت م.باهر رمزي 👋، اختر المادة لبدء التحميل",
+        reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 # ---------------- القوائم ----------------
@@ -219,13 +239,21 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))  
         return
 
-# ---------------- تشغيل Render ----------------
 
-def main():
-    bot = ApplicationBuilder().token(BOT_TOKEN).build()
-    bot.add_handler(CommandHandler("start", start))
-    bot.add_handler(CallbackQueryHandler(button))
-    bot.run_polling()
+# ---------------- تشغيل التطبيق ----------------
+
+application = ApplicationBuilder().token(BOT_TOKEN).build()
+
+application.add_handler(CommandHandler("start", start))
+application.add_handler(CallbackQueryHandler(button))
 
 if __name__ == "__main__":
-    main()
+    # تعيين webhook تلقائياً عند تشغيل Render
+    url = os.environ.get("RENDER_EXTERNAL_URL")
+    if url:
+        bot.delete_webhook()
+        bot.set_webhook(f"{url}/{BOT_TOKEN}")
+
+    # تشغيل Flask على المنفذ الذي يطلبه Render
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
