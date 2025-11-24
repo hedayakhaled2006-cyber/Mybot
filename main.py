@@ -1,39 +1,17 @@
-# -- coding: utf-8 --
+# -- coding: ufor i # -- coding: utf-8 --
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
-from telegram.ext import (
-    ApplicationBuilder, CommandHandler, CallbackQueryHandler,
-    ContextTypes
-)
-from flask import Flask, request
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 import os, json
+import asyncio
 
 # ---------------- إعدادات ----------------
-
 BOT_TOKEN = "8165119800:AAFm-hkwjdn3765NMmwGTRvAzEFr1H0WFDE"
 CHANNEL_USERNAME = "@baher1ramzi"
 DATA_FILE = "data.json"
 
-# Telegram Bot Object
 bot = Bot(BOT_TOKEN)
 
-# ---------------- Flask App ----------------
-
-app = Flask(__name__)
-
-@app.route("/", methods=["GET"])
-def home():
-    return "Bot is running!", 200
-
-@app.route(f"/{BOT_TOKEN}", methods=["POST"])
-def webhook():
-    data = request.get_json(force=True)
-    update = Update.de_json(data, bot)
-    application.process_update(update)
-    return "ok", 200
-
-
-# ---------------- بيانات البوت ----------------
-
+# ---------------- تحميل البيانات ----------------
 INITIAL_DATA = {
     "math": {
         "shoroh": {
@@ -96,8 +74,6 @@ INITIAL_DATA = {
 
 }
 
-# ---------------- تحميل البيانات ----------------
-
 def load_data():
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -108,7 +84,6 @@ def load_data():
 DATA = load_data()
 
 # ---------------- التحقق من الاشتراك ----------------
-
 async def check_membership(user_id, context):
     try:
         member = await context.bot.get_chat_member(CHANNEL_USERNAME, user_id)
@@ -117,7 +92,6 @@ async def check_membership(user_id, context):
         return False
 
 # ---------------- /start ----------------
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     if not await check_membership(user_id, context):
@@ -138,7 +112,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 # ---------------- القوائم ----------------
-
 def make_section_menu(mat):
     rows = [
         [InlineKeyboardButton("🎥 شروحات", callback_data=f"{mat}|shoroh")],
@@ -153,14 +126,12 @@ def make_section_menu(mat):
 def make_babs_buttons(mat, section):
     bab_count = 7 if mat == "math" else 5
     rows = [
-        [InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}")]
-         for i in range(1, bab_count + 1)
-        ]
+        [InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}") for i in range(1, bab_count + 1)]
+    ]
     rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=mat)])
     return rows
 
 # ---------------- التعامل مع الأزرار ----------------
-
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -202,58 +173,33 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if section == "sheets" and len(data) == 3:  
         group = data[2]  
-        await query.message.reply_text(  
-            "اختر الباب:",  
-            reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, f"sheets|{group}"))  
-        )  
+        await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, f"sheets|{group}")))  
         return  
 
     if section == "sheets" and len(data) == 4:  
         group, bab = data[2], data[3]  
         content = DATA.get(mat, {}).get("sheets", {}).get(group, {}).get(bab, [])  
-        rows = (  
-            [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content]  
-            if content else  
-            [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]  
-        )  
+        rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]  
         rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|sheets")])  
         await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))  
         return  
 
     if len(data) == 2 and section in ["shoroh", "exams"]:  
-        await query.message.reply_text(  
-            "اختر الباب:",  
-            reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section))  
-        )  
+        await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section)))  
         return  
 
     if len(data) == 3 and section in ["shoroh", "exams"]:  
         bab = data[2]  
         content = DATA.get(mat, {}).get(section, {}).get(bab, [])  
-        rows = (  
-            [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content]  
-            if content else  
-            [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]  
-        )  
+        rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]  
         rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|{section}")])  
         await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))  
         return
 
-
-# ---------------- تشغيل التطبيق ----------------
-
+# ---------------- تشغيل البوت ----------------
 application = ApplicationBuilder().token(BOT_TOKEN).build()
-
 application.add_handler(CommandHandler("start", start))
 application.add_handler(CallbackQueryHandler(button))
 
 if __name__ == "__main__":
-    # تعيين webhook تلقائياً عند تشغيل Render
-    url = os.environ.get("RENDER_EXTERNAL_URL")
-    if url:
-        bot.delete_webhook()
-        bot.set_webhook(f"{url}/{BOT_TOKEN}")
-
-    # تشغيل Flask على المنفذ الذي يطلبه Render
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    asyncio.run(application.run_polling())
