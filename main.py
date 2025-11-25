@@ -5,8 +5,8 @@ from flask import Flask, request
 import os, json
 import asyncio
 
-# ---------------- إعدادات ----------------
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # خليه من Environment Variables
+# ---------------- إعدادات ------------ 
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_USERNAME = "@baher1ramzi"
 DATA_FILE = "data.json"
 
@@ -14,8 +14,66 @@ bot = Bot(BOT_TOKEN)
 application = ApplicationBuilder().token(BOT_TOKEN).build()
 
 # ---------------- تحميل البيانات ----------------
-INITIAL_DATA = {   # نفس الداتا متاعك بالتمام
-    ...  # 🔥 خليه كما هو بالضبط (نفس اللي بعثته)
+INITIAL_DATA = {
+    "math": {
+        "shoroh": {
+            "b1": [
+                {"title": "المحددات 1", "url": "https://drive.google.com/file/d/1Nsy8PaWa7lzqo8Mi6epJ6m1wE8qwY2Ee/view?usp=drivesdk"},
+                {"title": "المحددات 2", "url": "https://drive.google.com/file/d/1YRFzl2MkuTTff3HZuCkOK1JoJ13vmvEa/view?usp=drivesdk"},
+                {"title": "تمارين عن المحددات", "url": "https://drive.google.com/file/d/1S0q974W7d7ELzt2iEpm1Pm2-mbu37uX0/view?usp=drivesdk"},
+                {"title": "المصفوفات 1", "url": "https://drive.google.com/file/d/1BKZm5Komn7L5wwRmnwtDaMczUYbUFfZ7/view?usp=drivesdk"},
+                {"title": "المصفوفات 2", "url": "https://drive.google.com/file/d/1UNTNN7GjWc_GkF4HyhIQJD7dfyI03_ss/view?usp=drivesdk"},
+                {"title": "تمارين عن المصفوفات 1", "url": "https://drive.google.com/file/d/1Eo9jXGpeg248mw6SNRAZZAfSV_pfZjeu/view?usp=drivesdk"},
+                {"title": "تمارين عن المصفوفات 2", "url": "https://drive.google.com/file/d/1UAJt8yjhWoVLNMaZp2H54gFi0DR4WeFe/view?usp=drivesdk"}
+            ],
+            "b2": [
+                {"title": "المتطابقات المثلثية", "url": "https://drive.google.com/file/d/1zJirDPv6gDa78v9Q_BperrYToRavTMR0/view?usp=drivesdk"},
+                {"title": "الزوايا المركبة", "url": "https://drive.google.com/file/d/1UQDYp5q3jw7oEAiyJQoUmT413QlJl4DH/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 1", "url": "https://drive.google.com/file/d/1y8SrlWYM0MWLGMOc2QwLTbKI6bCVaIkw/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 2", "url": "https://drive.google.com/file/d/1xvxHGrgatQ2-qb2lDdBtI4XfUAHwyKC1/view?usp=drivesdk"}
+            ],
+            "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+        },
+        "sheets": {
+            "manhaj": {
+                "b1": [{"title": "منهج الباب الأول", "url": "https://drive.google.com/file/d/1LbH9iWCa2Kk60WIy_TdJpWKK5dKCd3VY/view?usp=drivesdk"}],
+                "b2": [{"title": "منهج الباب الثاني", "url": "https://drive.google.com/file/d/1fBk9yEIY6ooFJnI8P9O0w28hfbRW3-Ru/view?usp=drivesdk"}],
+                "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+            },
+            "academia": {
+                "b1": [{"title": "أكاديميا الباب الأول", "url": "https://drive.google.com/file/d/1-R6r5xjtaGX6nQHi3hfMpFI8eT_kunT6/view?usp=drivesdk"}],
+                "b2": [{"title": "أكاديميا الباب الثاني", "url": "https://drive.google.com/file/d/128suiSsH92Sh58n21eWZuh1UHV4pMde7/view?usp=drivesdk"}],
+                "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+            }
+        },
+        "exams": {
+            "b1": [{"title": "أسئلة امتحانات الباب الأول", "url": "https://drive.google.com/file/d/17QCUX1OuMb1b-_1ZgFW0eWmSMk12be5g/view?usp=drivesdk"}],
+            "b2": [{"title": "أسئلة امتحانات الباب الثاني", "url": "https://drive.google.com/file/d/18cZyIUhlKxZHj1M4Px4boBjn4TUsvVUT/view?usp=drivesdk"}],
+            "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+        },
+        "black": [
+            {"title": "الكتاب الأسود", "url": "https://drive.google.com/file/d/1XsRtRcdo3T1Bw-q5sZCGZKOqp1hwcN4o/view?usp=drivesdk"}
+        ]
+    },
+    "stats": {
+        "shoroh": {
+            "b1": [
+                {"title": "نظرية الاحتمالات", "url": "https://drive.google.com/file/d/1RJ7H2Lil1HxukuavyWuNibTPDYjCDRJa/view?usp=drivesdk"},
+                {"title": "تابع نظرية الاحتمالات", "url": "https://drive.google.com/file/d/1DQM7vTGbYcj792eGddefv-z6CJYtdDP5/view?usp=drivesdk"}
+            ],
+            "b2": [], "b3": [], "b4": [], "b5": []
+        },
+        "sheets": {
+            "manhaj": {
+                "b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            },
+            "academia": {
+                "b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            }
+        }
+    }
 }
 
 def load_data():
