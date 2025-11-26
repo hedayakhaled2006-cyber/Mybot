@@ -60,10 +60,14 @@ INITIAL_DATA = {
             "b2": [], "b3": [], "b4": [], "b5": []
         },
         "sheets": {
-            "manhaj": {"b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
-                       "b2": [], "b3": [], "b4": [], "b5": []},
-            "academia": {"b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
-                         "b2": [], "b3": [], "b4": [], "b5": []}
+            "manhaj": {
+                "b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            },
+            "academia": {
+                "b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            }
         }
     }
 }
@@ -199,11 +203,14 @@ application.add_handler(CallbackQueryHandler(button))
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
-def home_page():
+def home():
     return "Bot is running!", 200
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
     update = Update.de_json(request.get_json(force=True), bot)
-    asyncio.get_event_loop().create_task(application.process_update(update))
+    try:
+        asyncio.run(application.process_update(update))
+    except Exception as e:
+        print("Webhook error:", e)
     return "ok", 200
