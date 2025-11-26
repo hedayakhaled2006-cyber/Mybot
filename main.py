@@ -1,8 +1,5 @@
 # -- coding: utf-8 --
 import os, json, asyncio
-import nest_asyncio
-nest_asyncio.apply()
-
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 from flask import Flask, request
@@ -15,7 +12,7 @@ DATA_FILE = "data.json"
 bot = Bot(BOT_TOKEN)
 application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-# ---------------- تحميل البيانات ----------------
+# ---------------- بيانات الملفات ----------------
 INITIAL_DATA = {
     "math": {
         "shoroh": {
@@ -25,8 +22,7 @@ INITIAL_DATA = {
                 {"title": "تمارين عن المحددات", "url": "https://drive.google.com/file/d/1S0q974W7d7ELzt2iEpm1Pm2-mbu37uX0/view?usp=drivesdk"},
                 {"title": "المصفوفات 1", "url": "https://drive.google.com/file/d/1BKZm5Komn7L5wwRmnwtDaMczUYbUFfZ7/view?usp=drivesdk"},
                 {"title": "المصفوفات 2", "url": "https://drive.google.com/file/d/1UNTNN7GjWc_GkF4HyhIQJD7dfyI03_ss/view?usp=drivesdk"},
-                {"title": "تمارين عن المصفوفات 1", "url": "https://drive.google.com/file/d/1Eo9jXGpeg248mw6SNRAZZAfSV_pfZjeu/view?usp=drivesdk"},
-                {"title": "تمارين عن المصفوفات 2", "url": "https://drive.google.com/file/d/1UAJt8yjhWoVLNMaZp2H54gFi0DR4WeFe/view?usp=drivesdk"}
+                {"title": "تمارين عن المصفوفات", "url": "https://drive.google.com/file/d/1Eo9jXGpeg248mw6SNRAZZAfSV_pfZjeu/view?usp=drivesdk"}
             ],
             "b2": [
                 {"title": "المتطابقات المثلثية", "url": "https://drive.google.com/file/d/1zJirDPv6gDa78v9Q_BperrYToRavTMR0/view?usp=drivesdk"},
@@ -53,9 +49,7 @@ INITIAL_DATA = {
             "b2": [{"title": "أسئلة امتحانات الباب الثاني", "url": "https://drive.google.com/file/d/18cZyIUhlKxZHj1M4Px4boBjn4TUsvVUT/view?usp=drivesdk"}],
             "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
         },
-        "black": [
-            {"title": "الكتاب الأسود", "url": "https://drive.google.com/file/d/1XsRtRcdo3T1Bw-q5sZCGZKOqp1hwcN4o/view?usp=drivesdk"}
-        ]
+        "black": [{"title": "الكتاب الأسود", "url": "https://drive.google.com/file/d/1XsRtRcdo3T1Bw-q5sZCGZKOqp1hwcN4o/view?usp=drivesdk"}]
     },
     "stats": {
         "shoroh": {
@@ -66,18 +60,15 @@ INITIAL_DATA = {
             "b2": [], "b3": [], "b4": [], "b5": []
         },
         "sheets": {
-            "manhaj": {
-                "b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
-                "b2": [], "b3": [], "b4": [], "b5": []
-            },
-            "academia": {
-                "b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
-                "b2": [], "b3": [], "b4": [], "b5": []
-            }
+            "manhaj": {"b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
+                       "b2": [], "b3": [], "b4": [], "b5": []},
+            "academia": {"b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
+                         "b2": [], "b3": [], "b4": [], "b5": []}
         }
     }
 }
 
+# ---------------- تحميل البيانات ----------------
 def load_data():
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -115,7 +106,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
-# ---------------- التعامل مع الأزرار ----------------
+# ---------------- القوائم ----------------
 def make_section_menu(mat):
     rows = [
         [InlineKeyboardButton("🎥 شروحات", callback_data=f"{mat}|shoroh")],
@@ -129,13 +120,13 @@ def make_section_menu(mat):
 
 def make_babs_buttons(mat, section):
     bab_count = 7 if mat == "math" else 5
-    rows = []
-    # build rows with single-button per line for clarity
-    for i in range(1, bab_count + 1):
-        rows.append([InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}")])
+    rows = [
+        [InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}") for i in range(1, bab_count + 1)]
+    ]
     rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=mat)])
     return rows
 
+# ---------------- التعامل مع الأزرار ----------------
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -154,10 +145,9 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("اختر القسم:", reply_markup=InlineKeyboardMarkup(make_section_menu(mat)))
         return
 
-    # handle mat|section|... patterns
-    mat = data[0]
-    section = data[1] if len(data) > 1 else None
+    mat, section = data[0], data[1]
 
+    # الكتاب الأسود زر واحد
     if section == "black":
         file = DATA["math"]["black"][0]
         btn = InlineKeyboardButton("📘 اضغط للعرض", url=file["url"])
@@ -168,45 +158,40 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    # sheets: could be mat|sheets or mat|sheets|group or mat|sheets|group|bab
-    if section == "sheets":
-        if len(data) == 2:
-            rows = [
-                [InlineKeyboardButton("📄 شيتات المنهج", callback_data=f"{mat}|sheets|manhaj")],
-                [InlineKeyboardButton("📁 شيتات أكاديميا", callback_data=f"{mat}|sheets|academia")],
-                [InlineKeyboardButton("⬅️ رجوع", callback_data=mat)]
-            ]
-            await query.message.reply_text("اختر نوع الشيتات:", reply_markup=InlineKeyboardMarkup(rows))
-            return
-        if len(data) == 3:
-            group = data[2]
-            await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, f"sheets|{group}")))
-            return
-        if len(data) == 4:
-            group = data[2]
-            bab = data[3]
-            content = DATA.get(mat, {}).get("sheets", {}).get(group, {}).get(bab, [])
-            rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
-            rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|sheets")])
-            await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
-            return
+    # باقي الأقسام (shoroh, sheets, exams)
+    if section in ["shoroh", "exams"] and len(data) == 2:
+        await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section)))
+        return
 
-    # shoroh or exams handling
-    if section in ["shoroh", "exams"]:
-        if len(data) == 2:
-            await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section)))
-            return
-        if len(data) == 3:
-            bab = data[2]
-            content = DATA.get(mat, {}).get(section, {}).get(bab, [])
-            rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
-            rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|{section}")])
-            await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
-            return
+    if section in ["shoroh", "exams"] and len(data) == 3:
+        bab = data[2]
+        content = DATA.get(mat, {}).get(section, {}).get(bab, [])
+        rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
+        rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|{section}")])
+        await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
+        return
 
-    # noop handler
-    if data[0] == "noop":
-        await query.message.reply_text("هذا الخيار غير متاح حالياً.")
+    # sheets
+    if section == "sheets" and len(data) == 2:
+        rows = [
+            [InlineKeyboardButton("📄 شيتات المنهج", callback_data=f"{mat}|sheets|manhaj")],
+            [InlineKeyboardButton("📁 شيتات أكاديميا", callback_data=f"{mat}|sheets|academia")],
+            [InlineKeyboardButton("⬅️ رجوع", callback_data=mat)]
+        ]
+        await query.message.reply_text("اختر نوع الشيتات:", reply_markup=InlineKeyboardMarkup(rows))
+        return
+
+    if section == "sheets" and len(data) == 3:
+        group = data[2]
+        await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, f"sheets|{group}")))
+        return
+
+    if section == "sheets" and len(data) == 4:
+        group, bab = data[2], data[3]
+        content = DATA.get(mat, {}).get("sheets", {}).get(group, {}).get(bab, [])
+        rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
+        rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|sheets")])
+        await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
         return
 
 # ---------------- Handlers ----------------
@@ -223,5 +208,5 @@ def home():
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
     update = Update.de_json(request.get_json(force=True), bot)
-    asyncio.get_event_loop().create_task(application.process_update(update))
+    asyncio.run(application.process_update(update))
     return "ok", 200
