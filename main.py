@@ -147,7 +147,6 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     mat, section = data[0], data[1]
 
-    # الكتاب الأسود زر واحد
     if section == "black":
         file = DATA["math"]["black"][0]
         btn = InlineKeyboardButton("📘 اضغط للعرض", url=file["url"])
@@ -158,7 +157,6 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    # باقي الأقسام (shoroh, sheets, exams)
     if section in ["shoroh", "exams"] and len(data) == 2:
         await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section)))
         return
@@ -171,7 +169,6 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
         return
 
-    # sheets
     if section == "sheets" and len(data) == 2:
         rows = [
             [InlineKeyboardButton("📄 شيتات المنهج", callback_data=f"{mat}|sheets|manhaj")],
@@ -202,7 +199,7 @@ application.add_handler(CallbackQueryHandler(button))
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
-def home():
+def home_page():
     return "Bot is running!", 200
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
