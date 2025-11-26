@@ -19,21 +19,61 @@ application = ApplicationBuilder().token(BOT_TOKEN).build()
 INITIAL_DATA = {
     "math": {
         "shoroh": {
-            "b1": [{"title": "المحددات 1", "url": "https://drive.google.com/file/d/1Nsy8PaWa7lzqo8Mi6epJ6m1wE8qwY2Ee/view?usp=drivesdk"}],
-            "b2": [], "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+            "b1": [
+                {"title": "المحددات 1", "url": "https://drive.google.com/file/d/1Nsy8PaWa7lzqo8Mi6epJ6m1wE8qwY2Ee/view?usp=drivesdk"},
+                {"title": "المحددات 2", "url": "https://drive.google.com/file/d/1YRFzl2MkuTTff3HZuCkOK1JoJ13vmvEa/view?usp=drivesdk"},
+                {"title": "تمارين عن المحددات", "url": "https://drive.google.com/file/d/1S0q974W7d7ELzt2iEpm1Pm2-mbu37uX0/view?usp=drivesdk"},
+                {"title": "المصفوفات 1", "url": "https://drive.google.com/file/d/1BKZm5Komn7L5wwRmnwtDaMczUYbUFfZ7/view?usp=drivesdk"},
+                {"title": "المصفوفات 2", "url": "https://drive.google.com/file/d/1UNTNN7GjWc_GkF4HyhIQJD7dfyI03_ss/view?usp=drivesdk"},
+                {"title": "تمارين عن المصفوفات 1", "url": "https://drive.google.com/file/d/1Eo9jXGpeg248mw6SNRAZZAfSV_pfZjeu/view?usp=drivesdk"},
+                {"title": "تمارين عن المصفوفات 2", "url": "https://drive.google.com/file/d/1UAJt8yjhWoVLNMaZp2H54gFi0DR4WeFe/view?usp=drivesdk"}
+            ],
+            "b2": [
+                {"title": "المتطابقات المثلثية", "url": "https://drive.google.com/file/d/1zJirDPv6gDa78v9Q_BperrYToRavTMR0/view?usp=drivesdk"},
+                {"title": "الزوايا المركبة", "url": "https://drive.google.com/file/d/1UQDYp5q3jw7oEAiyJQoUmT413QlJl4DH/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 1", "url": "https://drive.google.com/file/d/1y8SrlWYM0MWLGMOc2QwLTbKI6bCVaIkw/view?usp=drivesdk"},
+                {"title": "تمارين متنوعة 2", "url": "https://drive.google.com/file/d/1xvxHGrgatQ2-qb2lDdBtI4XfUAHwyKC1/view?usp=drivesdk"}
+            ],
+            "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
         },
         "sheets": {
-            "manhaj": {"b1": [{"title": "منهج الباب الأول", "url": "https://drive.google.com/file/d/1LbH9iWCa2Kk60WIy_TdJpWKK5dKCd3VY/view?usp=drivesdk"}]},
-            "academia": {"b1": [{"title": "أكاديميا الباب الأول", "url": "https://drive.google.com/file/d/1-R6r5xjtaGX6nQHi3hfMpFI8eT_kunT6/view?usp=drivesdk"}]}
+            "manhaj": {
+                "b1": [{"title": "منهج الباب الأول", "url": "https://drive.google.com/file/d/1LbH9iWCa2Kk60WIy_TdJpWKK5dKCd3VY/view?usp=drivesdk"}],
+                "b2": [{"title": "منهج الباب الثاني", "url": "https://drive.google.com/file/d/1fBk9yEIY6ooFJnI8P9O0w28hfbRW3-Ru/view?usp=drivesdk"}],
+                "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+            },
+            "academia": {
+                "b1": [{"title": "أكاديميا الباب الأول", "url": "https://drive.google.com/file/d/1-R6r5xjtaGX6nQHi3hfMpFI8eT_kunT6/view?usp=drivesdk"}],
+                "b2": [{"title": "أكاديميا الباب الثاني", "url": "https://drive.google.com/file/d/128suiSsH92Sh58n21eWZuh1UHV4pMde7/view?usp=drivesdk"}],
+                "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+            }
         },
-        "exams": {"b1": [{"title": "أسئلة امتحانات الباب الأول", "url": "https://drive.google.com/file/d/17QCUX1OuMb1b-_1ZgFW0eWmSMk12be5g/view?usp=drivesdk"}]},
-        "black": [{"title": "الكتاب الأسود", "url": "https://drive.google.com/file/d/1XsRtRcdo3T1Bw-q5sZCGZKOqp1hwcN4o/view?usp=drivesdk"}]
+        "exams": {
+            "b1": [{"title": "أسئلة امتحانات الباب الأول", "url": "https://drive.google.com/file/d/17QCUX1OuMb1b-_1ZgFW0eWmSMk12be5g/view?usp=drivesdk"}],
+            "b2": [{"title": "أسئلة امتحانات الباب الثاني", "url": "https://drive.google.com/file/d/18cZyIUhlKxZHj1M4Px4boBjn4TUsvVUT/view?usp=drivesdk"}],
+            "b3": [], "b4": [], "b5": [], "b6": [], "b7": []
+        },
+        "black": [
+            {"title": "الكتاب الأسود", "url": "https://drive.google.com/file/d/1XsRtRcdo3T1Bw-q5sZCGZKOqp1hwcN4o/view?usp=drivesdk"}
+        ]
     },
     "stats": {
-        "shoroh": {"b1": [{"title": "نظرية الاحتمالات", "url": "https://drive.google.com/file/d/1RJ7H2Lil1HxukuavyWuNibTPDYjCDRJa/view?usp=drivesdk"}]},
+        "shoroh": {
+            "b1": [
+                {"title": "نظرية الاحتمالات", "url": "https://drive.google.com/file/d/1RJ7H2Lil1HxukuavyWuNibTPDYjCDRJa/view?usp=drivesdk"},
+                {"title": "تابع نظرية الاحتمالات", "url": "https://drive.google.com/file/d/1DQM7vTGbYcj792eGddefv-z6CJYtdDP5/view?usp=drivesdk"}
+            ],
+            "b2": [], "b3": [], "b4": [], "b5": []
+        },
         "sheets": {
-            "manhaj": {"b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}]},
-            "academia": {"b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}]}
+            "manhaj": {
+                "b1": [{"title": "منهج الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1EQ8pvHbdwrnu-0TGNdDedrj_2MJuvKx1/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            },
+            "academia": {
+                "b1": [{"title": "أكاديميا الاحصاء الباب الأول", "url": "https://drive.google.com/file/d/1j5rCPO79B-KjPE7my2HSb9FovPkDet0M/view?usp=drivesdk"}],
+                "b2": [], "b3": [], "b4": [], "b5": []
+            }
         }
     }
 }
@@ -89,9 +129,10 @@ def make_section_menu(mat):
 
 def make_babs_buttons(mat, section):
     bab_count = 7 if mat == "math" else 5
-    rows = [
-        [InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}") for i in range(1, bab_count + 1)]
-    ]
+    rows = []
+    # build rows with single-button per line for clarity
+    for i in range(1, bab_count + 1):
+        rows.append([InlineKeyboardButton(f"📘 الباب {i}", callback_data=f"{mat}|{section}|b{i}")])
     rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=mat)])
     return rows
 
@@ -113,7 +154,9 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("اختر القسم:", reply_markup=InlineKeyboardMarkup(make_section_menu(mat)))
         return
 
-    mat, section = data[0], data[1]
+    # handle mat|section|... patterns
+    mat = data[0]
+    section = data[1] if len(data) > 1 else None
 
     if section == "black":
         file = DATA["math"]["black"][0]
@@ -123,6 +166,47 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown",
             reply_markup=InlineKeyboardMarkup([[btn], [InlineKeyboardButton("⬅️ رجوع", callback_data="math")]])
         )
+        return
+
+    # sheets: could be mat|sheets or mat|sheets|group or mat|sheets|group|bab
+    if section == "sheets":
+        if len(data) == 2:
+            rows = [
+                [InlineKeyboardButton("📄 شيتات المنهج", callback_data=f"{mat}|sheets|manhaj")],
+                [InlineKeyboardButton("📁 شيتات أكاديميا", callback_data=f"{mat}|sheets|academia")],
+                [InlineKeyboardButton("⬅️ رجوع", callback_data=mat)]
+            ]
+            await query.message.reply_text("اختر نوع الشيتات:", reply_markup=InlineKeyboardMarkup(rows))
+            return
+        if len(data) == 3:
+            group = data[2]
+            await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, f"sheets|{group}")))
+            return
+        if len(data) == 4:
+            group = data[2]
+            bab = data[3]
+            content = DATA.get(mat, {}).get("sheets", {}).get(group, {}).get(bab, [])
+            rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
+            rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|sheets")])
+            await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
+            return
+
+    # shoroh or exams handling
+    if section in ["shoroh", "exams"]:
+        if len(data) == 2:
+            await query.message.reply_text("اختر الباب:", reply_markup=InlineKeyboardMarkup(make_babs_buttons(mat, section)))
+            return
+        if len(data) == 3:
+            bab = data[2]
+            content = DATA.get(mat, {}).get(section, {}).get(bab, [])
+            rows = [[InlineKeyboardButton(item["title"], url=item["url"])] for item in content] if content else [[InlineKeyboardButton("⚠️ المحتوى غير متوفر", callback_data="noop")]]
+            rows.append([InlineKeyboardButton("⬅️ رجوع", callback_data=f"{mat}|{section}")])
+            await query.message.reply_text("اختر الملف:", reply_markup=InlineKeyboardMarkup(rows))
+            return
+
+    # noop handler
+    if data[0] == "noop":
+        await query.message.reply_text("هذا الخيار غير متاح حالياً.")
         return
 
 # ---------------- Handlers ----------------
