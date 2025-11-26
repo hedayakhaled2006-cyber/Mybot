@@ -1,5 +1,6 @@
 # -- coding: utf-8 --
 import os, json, asyncio
+import nest_asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 from flask import Flask, request
@@ -11,6 +12,9 @@ DATA_FILE = "data.json"
 
 bot = Bot(BOT_TOKEN)
 application = ApplicationBuilder().token(BOT_TOKEN).build()
+
+# ---------------- تطبيق nest_asyncio ----------------
+nest_asyncio.apply()
 
 # ---------------- بيانات الملفات ----------------
 INITIAL_DATA = {
@@ -209,8 +213,6 @@ def home():
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
     update = Update.de_json(request.get_json(force=True), bot)
-    try:
-        asyncio.run(application.process_update(update))
-    except Exception as e:
-        print("Webhook error:", e)
+    # ✅ استخدام create_task مع nest_asyncio
+    asyncio.get_event_loop().create_task(application.process_update(update))
     return "ok", 200
